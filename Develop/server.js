@@ -1,5 +1,4 @@
 const express = require('express');
-const fs = require('fs');
 const path = require('path'); 
 const db = require('./db/db.json');
 const uuid = require('./helpers/uuid');
@@ -25,14 +24,13 @@ app.get('/notes', (req, res) =>
 
 // GET route for Api Json file
 app.get('/api/notes', (req, res) =>{
-    res.json(db);
     console.info(`${req.method} request received`);
+    readFromFile('./db/db.json').then((data) => res.json(JSON.parse(data)));
 });
 
 
 // POST route for Api Json file
 app.post('/api/notes', (req, res) =>{
-  
   console.info(`${req.method} request received`);
 
     const {title, text} = req.body;
@@ -40,7 +38,7 @@ app.post('/api/notes', (req, res) =>{
           const newNote = {
             title,
             text,
-            note_id: uuid(),
+            id: uuid(),
           };
 
           readAndAppend(newNote, './db/db.json');
@@ -56,6 +54,17 @@ app.post('/api/notes', (req, res) =>{
         } else {
           res.status(500).json('Error in posting note. Note must have a title and some body text.');
         }
+
+});
+
+app.delete('/notes/db/:id', (req, res) => {
+  console.info(`${req.method} request received`);
+  const selectNote = req.params.id
+  for (let i = 0; i < db.length; i++){
+    if (selectNote === db[i].id){
+      return console.log(selectNote)
+    }
+  }
 
 });
 
