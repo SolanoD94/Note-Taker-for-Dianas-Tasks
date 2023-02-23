@@ -59,12 +59,14 @@ app.post('/api/notes', (req, res) =>{
 
 app.delete('/notes/db/:id', (req, res) => {
   console.info(`${req.method} request received`);
-  const selectNote = req.params.id
-  for (let i = 0; i < db.length; i++){
-    if (selectNote === db[i].id){
-      return console.log(selectNote)
-    }
-  }
+  readFromFile('./db/db.json').then((data) => {
+    const selectNote = req.params.id;
+    const notes = JSON.parse(data);
+    const notesArray = notes.filter(note => selectNote != note.id)
+
+    writeToFile('./db/db.json', notesArray);
+    readFromFile('./db/db.json').then((data) => res.json(JSON.parse(data)));
+  });
 
 });
 
