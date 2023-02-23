@@ -1,1 +1,7 @@
-[]
+[
+    {
+        "title": "My first Note",
+        "text": "To create a new environment\nRun in the terminal:\n\nheroku create\n\nTo push files to Heroku:\n\ngit remote -v\n\ngit push heroku master\nRemember to check if you are using master or main.",
+        "id": "791e"
+    }
+]
